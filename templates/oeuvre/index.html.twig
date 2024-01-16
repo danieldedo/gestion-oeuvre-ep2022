@@ -1,0 +1,68 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Oeuvre index{% endblock %}
+
+{% block body %}
+
+    <div class="container">
+       
+
+    <h1>Liste des oeuvres</h1>
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success" role="alert">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-danger" role="alert">
+            {{ message }}
+        </div>
+    {% endfor %}
+    
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Oeuvre</th>
+                        <th>Auteur</th>
+                        <th>Annee</th>
+                        <th>Catégorie</th>
+                        <th>actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {# {{ dump(oeuvres) }} #}
+                {% for oeuvre in oeuvres %}
+                    <tr>
+                        <td>{{ oeuvre.nom }}</td>
+                        {% if oeuvre.artiste is null %}
+                            <td></td>
+                        {% else %}
+                            <td>{{ oeuvre.artiste.nom }}</td>
+                        {% endif %}
+                        <td>{{ oeuvre.annee }}</td>
+                        <td>{{ oeuvre.categorie.nomcategorie }}</td>
+                        <td class="d-flex justify-content-around">
+                            {# {{ include('oeuvre/_delete_form.html.twig') }} #}
+                            <button type="button" class="btn btn-danger supprimer" data-bs-toggle="modal" data-bs-target="#exampleModal" data-id="{{ oeuvre.id }}">Supprimer</button>
+                            <a class="btn btn-secondary" href="{{ path('app_oeuvre_delete', {'id': oeuvre.id}) }}">Editer</a>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="5">Pas de donnees</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <a class="btn btn-dark" href="{{ path('app_oeuvre_new') }}">Créer une nouvelle oeuvre</a>
+    </div>
+
+    {{ include('oeuvre/_modal_delete.html.twig') }}
+    <script src="{{ asset('js/modal.js') }}"></script>
+
+{% endblock %}
